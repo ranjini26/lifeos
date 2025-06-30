@@ -60,34 +60,6 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
     }
   };
 
-  const handleDemoLogin = async () => {
-    setEmail('demo@lifeos.app');
-    setPassword('demo123');
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      // Try to sign in with demo account, if it doesn't exist, create it
-      try {
-        await AuthService.signIn('demo@lifeos.app', 'demo123');
-        onAuthSuccess();
-      } catch (signInError: any) {
-        if (signInError.message?.includes('Invalid login credentials')) {
-          // Demo account doesn't exist, create it
-          await AuthService.signUp('demo@lifeos.app', 'demo123', 'Demo User');
-          onAuthSuccess();
-        } else {
-          throw signInError;
-        }
-      }
-    } catch (error: any) {
-      console.error('Demo login error:', error);
-      setError('Failed to access demo account. Please try manual login.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <motion.div
@@ -104,25 +76,6 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
           <p className="text-slate-600">
             {isSignUp ? 'Create your account' : 'Welcome back'}
           </p>
-        </div>
-
-        {/* Demo Access */}
-        <div className="mb-6">
-          <button
-            onClick={handleDemoLogin}
-            disabled={isLoading}
-            className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-white font-medium hover:from-emerald-500 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed mb-4"
-          >
-            {isLoading ? 'Accessing Demo...' : 'Try Demo Account'}
-          </button>
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-slate-500">or</span>
-            </div>
-          </div>
         </div>
 
         {/* Error Message */}
